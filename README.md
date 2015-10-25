@@ -6,7 +6,7 @@
 
 HTMLDocument is a foundational [React](https://facebook.github.io/react/) component useful for rendering full html documents on the server.
 
-It provides a convenient and simple api for rendering common html tags such as title, meta, styles, and scripts. In addition, it has universal/isomorphic-friendly features such as server state serialization, and support for static and non-static pages. HTMLDocument is also well tested and currently used in production on some of our web projects at [Venmo](http://www.venmo.com), so it's safe to use.
+It provides a convenient and simple api for rendering common html tags such as title, meta, stylesheets, and scripts. In addition, it has universal/isomorphic-friendly features such as server state serialization, and support for static and non-static pages. HTMLDocument is also well tested and currently used in production on some of our web projects at [Venmo](http://www.venmo.com), so it's safe to use.
 
 You no longer need to write boilerplate html strings or roll out your own custom HTML component from scratch on every project you start. Have fun using it!
 
@@ -49,7 +49,7 @@ app.get('/mypageroute', function(req, res, next) {
     <HTMLDocument
       title="My Page"
       scripts=['/scripts/main.js']
-      styles=['/styles/styles.css']
+      stylesheets=['/styles/styles.css']
       metatags={[
         { name: 'description', content: 'My description' }
       ]}
@@ -81,7 +81,7 @@ app.get('/mypageroute', function(req, res, next) {
           title="My Page"
           state={state}
           scripts=['/scripts/main.js']
-          styles=['/styles/styles.css']
+          stylesheets=['/styles/styles.css']
           <MyApp {...state} />
         </HTMLDocument>
       );
@@ -119,11 +119,11 @@ Props for Universal Rendering:
 ### Development
 Please take a look at `package.json` for available npm scripts.
 
-For running `mocha` tests: `npm test`
+For running mocha tests: `npm test`
 
-For compiling `src` directory into `dist` directory with `babel`: `npm run build`
+For compiling `src` directory into `dist` directory with babel: `npm run build`
 
-For linting with `eslint`: `npm run lint`
+For linting with eslint: `npm run lint`
 
 
 ### Contributing

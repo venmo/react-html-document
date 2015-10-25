@@ -1,7 +1,7 @@
 {
   "name": "react-html-document",
   "version": "1.0.1",
-  "description": "A React component useful for rendering full html documents on the server.",
+  "description": "A foundational React component useful for rendering full html documents on the server.",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
