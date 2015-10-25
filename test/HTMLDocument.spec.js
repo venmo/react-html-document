@@ -27,6 +27,16 @@ describe('HTMLDocument', () => {
     expect(qs('title').html()).to.equal(props.title);
   });
 
+  it('should render html attributes', () => {
+    const props = {
+      htmlAttributes: {
+        lang: 'es'
+      }
+    };
+    const qs = renderAndGetQuerySelector(props);
+    expect(qs('html').attr('lang')).to.equal(props.htmlAttributes.lang);
+  });
+
   describe('Metatags', () => {
     it('should render metatags', () => {
       const props = {

@@ -94,7 +94,7 @@ class HTMLDocument extends Component {
 
   render() {
     return (
-      <html>
+      <html {...this.props.htmlAttributes}>
         <head>
           <title>{this.props.title}</title>
           {this.renderMetatags()}
@@ -112,6 +112,7 @@ class HTMLDocument extends Component {
 HTMLDocument.propTypes = {
   childrenContainerId: PropTypes.string,
   children: PropTypes.node,
+  htmlAttributes: PropTypes.object,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
   state: PropTypes.object,
@@ -122,6 +123,7 @@ HTMLDocument.propTypes = {
 
 HTMLDocument.defaultProps = {
   childrenContainerId: 'app',
+  htmlAttributes: {},
   metatags: [],
   scripts: [],
   state: null,

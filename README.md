@@ -106,6 +106,7 @@ General Use Props:
 | `scripts` | array | A list of scripts in one of three forms: string paths `'mysite.com/script.js'`, script src objects `{ src: 'mysite.com/script.js' }` or inline scripts `{ inline: 'var x = 1;' }` | `[ ]`
 | `stylesheets` | array | A list of stylesheet in one of three forms: string paths `'mysite.com/styles.css'`, style href objects `{ href: 'mysite.com/styles.css' }` or inline styles `{ inline: 'body { color: '#333' }' }` | `[ ]`
 | `childrenContainerId`           | string | The id for the dom element that contains the children nodes. | `'app'`
+| `htmlAttributes` | object | [Attributes](https://facebook.github.io/react/docs/tags-and-attributes.html#supported-attributes) that you'd like to use on the html tag. | `{ }`
 
 Props for Universal Rendering:
 
