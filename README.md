@@ -74,7 +74,7 @@ app.get('/mypageroute', function(req, res, next) {
 General Use Props:
 
 | Prop |  Type | Details | Default
-| -------------- | ------ | --------------- |
+| -------------- | ------ | --------------- | ---- |
 | `title` | string | Title for the document. | `''`
 | `metatags`    | array | A list of meta tag attributes. | `[ ]`
 | `scripts` | array | A list of scripts in one of three forms: script src strings `'mysite.com/script.js'`, script src objects `{ src: 'mysite.com/script.js' }` or inline scripts `{ inline: 'var x = 1;' }` | `[ ]`
@@ -84,7 +84,7 @@ General Use Props:
 Props for Universal Rendering:
 
 | Prop |  Type | Details | Default
-| -------------- | ------ | --------------- |
+| -------------- | ------ | --------------- | ---- |
 | `state` | object | Contains current server state that will be rendered into a javascript object on the page. Helpful for re-mounting with props on the client in universal apps. | { }
 | `stateKey` | string | Specifies what key to use when saving the state on the client. `window[stateJSObjectKey] = state;` | `'__state'`
 | `shouldRenderChildrenStatically` | bool | Controls whether children are rendered with [`renderToStaticMarkup` or `renderToString`](https://facebook.github.io/react/docs/top-level-api.html#reactdomserver) . | `false`
