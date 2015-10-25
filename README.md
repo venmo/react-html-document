@@ -108,11 +108,11 @@ Props for Universal Rendering:
 
 
 ### Development
-Please take a look at `package.json`. Main ones you can run are the following:
+Please take a look at `package.json` for available npm scripts.
 
-For running `mocha` tests: `npm run test`
+For running `mocha` tests: `npm test`
 
-For compiling `src` directory with `babel`: `npm run build`
+For compiling `src` directory into `dist` directory with `babel`: `npm run build`
 
 For linting with `eslint`: `npm run lint`
 
