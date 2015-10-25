@@ -18,7 +18,23 @@ This assumes that you’re using [npm](http://npmjs.com/).
 
 ### Examples
 
-Without state:
+Static page:
+```es6
+import HTMLDocument from 'react-html-document';
+import ReactDOM from 'react-dom/server';
+
+app.get('/mypageroute', function(req, res, next) {
+  const doc = (
+    <HTMLDocument title="My Page" shouldRenderChildrenStatically>
+      <h1>Hello World</h1>
+    </HTMLDocument>
+  );
+  const markup = ReactDOM.renderToStaticMarkup(doc);
+  return res.send(markup);
+});
+```
+
+Universal page with scripts, stylesheets, and meta tags:
 
 ```es6
 import HTMLDocument from 'react-html-document';
@@ -41,7 +57,7 @@ app.get('/mypageroute', function(req, res, next) {
 });
 ```
 
-With state:
+Universal page with state:
 
 ```es6
 import HTMLDocument from 'react-html-document';
