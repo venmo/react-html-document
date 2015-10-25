@@ -18,7 +18,7 @@ This assumes that you’re using [npm](http://npmjs.com/).
 
 ### Examples
 
-Static page:
+Basic static page:
 ```es6
 import HTMLDocument from 'react-html-document';
 import ReactDOM from 'react-dom/server';
@@ -34,7 +34,7 @@ app.get('/mypageroute', function(req, res, next) {
 });
 ```
 
-Universal page with scripts, stylesheets, and meta tags:
+Static page with scripts, stylesheets, and meta tags:
 
 ```es6
 import HTMLDocument from 'react-html-document';
@@ -49,7 +49,7 @@ app.get('/mypageroute', function(req, res, next) {
       meta={[
         { name: 'description', content: 'My description' }
       ]}
-      <MyApp />
+      <MyPage />
     </HTMLDocument>
   );
   const markup = ReactDOM.renderToStaticMarkup(doc);
@@ -64,8 +64,9 @@ import HTMLDocument from 'react-html-document';
 import ReactDOM from 'react-dom/server';
 
 /**
-* getStateForURL is a magical function that resolves to a state object
-* based on the current's request url
+* for illustration purposes, getStateForURL is an unimplemented function that
+* returns a promise that resolves to a state object based on the current
+* request's url
 */
 
 app.get('/mypageroute', function(req, res, next) {
@@ -84,6 +85,10 @@ app.get('/mypageroute', function(req, res, next) {
       return res.send(markup);
     });
 });
+
+// later on the client
+const state = window.__state;
+Render.render(<MyApp {...state} />, document.getElementById('app'));
 ```
 
 ### API
