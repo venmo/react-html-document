@@ -10,8 +10,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel/register --recursive",
     "build": "babel src --out-dir dist",
-    "lint": "eslint src test",
-    "postinstall": "npm run build"
+    "lint": "eslint src test"
   },
   "keywords": [
     "react",
