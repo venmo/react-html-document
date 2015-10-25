@@ -74,9 +74,9 @@ describe('HTMLDocument', () => {
         ]
       };
       const qs = renderAndGetQuerySelector(props);
-      const $links = qs('style');
-      expect($links.length).to.equal(1);
-      expect($links.html()).to.equal(props.stylesheets[0].inline);
+      const $styles = qs('style');
+      expect($styles.length).to.equal(1);
+      expect($styles.html()).to.equal(props.stylesheets[0].inline);
     });
   });
 
