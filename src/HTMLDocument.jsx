@@ -6,10 +6,10 @@ class HTMLDocument extends Component {
 
   renderChildren() {
     if ( !this.props.children ) return null;
-    const { shouldRenderChildrenStatically, children, childrenContainerId } = this.props;
-    const markup = shouldRenderChildrenStatically ?
-      ReactDOM.renderToStaticMarkup(children) :
-      ReactDOM.renderToString(children);
+    const { children, childrenContainerId, state } = this.props;
+    const markup = state ?
+      ReactDOM.renderToString(children) :
+      ReactDOM.renderToStaticMarkup(children);
     const childrenHTML = { __html: markup };
     return (
       <div key={childrenContainerId} id={childrenContainerId} dangerouslySetInnerHTML={childrenHTML} />
@@ -61,6 +61,7 @@ class HTMLDocument extends Component {
   }
 
   renderStateScript() {
+    if ( !this.props.state ) return null;
     const { state, stateKey } = this.props;
     const serverState = `window.${stateKey} = ${JSON.stringify(state)};`;
     const scriptHTML = { __html: serverState };
@@ -113,7 +114,6 @@ HTMLDocument.propTypes = {
   children: PropTypes.node,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
-  shouldRenderChildrenStatically: PropTypes.bool,
   state: PropTypes.object,
   stateKey: PropTypes.string,
   stylesheets: PropTypes.array,
@@ -124,8 +124,7 @@ HTMLDocument.defaultProps = {
   childrenContainerId: 'app',
   metatags: [],
   scripts: [],
-  shouldRenderChildrenStatically: false,
-  state: { },
+  state: null,
   stateKey: '__state',
   stylesheets: [],
   title: ''

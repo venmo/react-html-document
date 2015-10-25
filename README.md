@@ -25,7 +25,7 @@ import ReactDOM from 'react-dom/server';
 
 app.get('/mypageroute', function(req, res, next) {
   const doc = (
-    <HTMLDocument title="My Page" shouldRenderChildrenStatically>
+    <HTMLDocument title="My Page">
       <h1>Hello World</h1>
     </HTMLDocument>
   );
@@ -102,9 +102,9 @@ Props for Universal Rendering:
 
 | Prop |  Type | Details | Default
 | -------------- | ------ | --------------- | ---- |
-| `state` | object | Contains current server state that will be rendered into a javascript object on the page. Helpful for re-mounting with props on the client in universal apps. | { }
+| `state` | object | Contains current server state that will be rendered into a javascript object on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
 | `stateKey` | string | Specifies what key to use when saving the state on the client. `window[stateJSObjectKey] = state;` | `'__state'`
-| `shouldRenderChildrenStatically` | bool | Controls whether children are rendered with [`renderToStaticMarkup` or `renderToString`](https://facebook.github.io/react/docs/top-level-api.html#reactdomserver) . | `false`
+
 
 
 ### Development

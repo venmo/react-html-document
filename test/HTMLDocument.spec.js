@@ -97,7 +97,8 @@ describe('HTMLDocument', () => {
 
     it('should use state key for state script data attribute', () => {
       const props = {
-        stateKey: '__state'
+        stateKey: '__state',
+        state: { myState: true }
       };
       const qs = renderAndGetQuerySelector(props);
       expect(qs(`script[data-${props.stateKey}]`).length).to.equal(1);
@@ -178,19 +179,17 @@ describe('HTMLDocument', () => {
       expect(qs(`#${props.childrenContainerId}`).text()).to.equal(testAppProps.message);
     });
 
-    it('should render children statically', () => {
-      const props = {
-        shouldRenderChildrenStatically: true
-      };
+    it('should render children statically when given no state', () => {
+      const props = { };
       const children = <TestApp />;
       const qs = renderAndGetQuerySelector(props, children);
       const reactSelector = '[data-reactid]';
       expect(qs(reactSelector).length).to.equal(0);
     });
 
-    it('should render children with react ids for client mounting', () => {
+    it('should render children with react ids for client mounting when given state', () => {
       const props = {
-        shouldRenderChildrenStatically: false
+        state: { myState: true }
       };
       const children = <TestApp />;
       const qs = renderAndGetQuerySelector(props, children);
