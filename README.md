@@ -1,10 +1,10 @@
-# react-html-document
+# HTMLDocument
 
-HTMLDocument is a foundational [React](https://facebook.github.io/react/) component useful for rendering html documents on the server.
+HTMLDocument is a foundational [React](https://facebook.github.io/react/) component useful for rendering full html documents on the server.
 
-It provides a convenient api for rendering common html tags such as title, meta, styles, and scripts. In addition, it has universal/isomorphic-friendly features such as server state sharing, and support for static and non-static React children nodes.
+It provides a convenient and simple api for rendering common html tags such as title, meta, styles, and scripts. In addition, it has universal/isomorphic-friendly features such as server state serialization, and support for static and non-static pages. HTMLDocument is also well tested and currently used in production on some of our web projects at [Venmo](http://www.venmo.com), so it's safe to use.
 
-It's well tested and currently used in production on some of our web projects at [Venmo](http://www.venmo.com).
+You no longer need to write boilerplate html strings or roll out your own custom HTML component from scratch on every project you start. Have fun using it!
 
 ### Installation
 
@@ -46,7 +46,7 @@ app.get('/mypageroute', function(req, res, next) {
       title="My Page"
       scripts=['/scripts/main.js']
       styles=['/styles/styles.css']
-      meta={[
+      metatags={[
         { name: 'description', content: 'My description' }
       ]}
       <MyPage />
@@ -99,8 +99,8 @@ General Use Props:
 | -------------- | ------ | --------------- | ---- |
 | `title` | string | Title for the document. | `''`
 | `metatags`    | array | A list of meta tag attributes. | `[ ]`
-| `scripts` | array | A list of scripts in one of three forms: script src strings `'mysite.com/script.js'`, script src objects `{ src: 'mysite.com/script.js' }` or inline scripts `{ inline: 'var x = 1;' }` | `[ ]`
-| `stylesheets` | array | A list of stylesheet href strings `'mysite.com/styles.css'`, style href objects `{ href: 'mysite.com/styles.css' }` or inline styles `{ inline: 'body { color: '#333' }' }` | `[ ]`
+| `scripts` | array | A list of scripts in one of three forms: string paths `'mysite.com/script.js'`, script src objects `{ src: 'mysite.com/script.js' }` or inline scripts `{ inline: 'var x = 1;' }` | `[ ]`
+| `stylesheets` | array | A list of stylesheet in one of three forms: string paths `'mysite.com/styles.css'`, style href objects `{ href: 'mysite.com/styles.css' }` or inline styles `{ inline: 'body { color: '#333' }' }` | `[ ]`
 | `childrenContainerId`           | string | The id for the dom element that contains the children nodes. | `'app'`
 
 Props for Universal Rendering:
