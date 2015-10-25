@@ -19,7 +19,8 @@ This assumes that you’re using [npm](http://npmjs.com/).
 ### Examples
 
 Without state:
-```
+
+```es6
 import HTMLDocument from 'react-html-document';
 import ReactDOM from 'react-dom/server';
 
@@ -42,7 +43,7 @@ app.get('/mypageroute', function(req, res, next) {
 
 With state:
 
-```
+```es6
 import HTMLDocument from 'react-html-document';
 import ReactDOM from 'react-dom/server';
 
