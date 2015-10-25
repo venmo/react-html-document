@@ -1,5 +1,9 @@
 # HTMLDocument
 
+[![Version](https://img.shields.io/github/release/venmo/react-html-document.svg)](https://github.com/venmo/react-html-document/releases)
+[![build status](https://img.shields.io/travis/venmo/react-html-document/master.svg?style=flat-square)](https://travis-ci.org/venmo/react-html-document)
+[![npm version](https://img.shields.io/npm/v/react-html-document.svg?style=flat-square)](https://www.npmjs.com/package/react-html-document)
+
 HTMLDocument is a foundational [React](https://facebook.github.io/react/) component useful for rendering full html documents on the server.
 
 It provides a convenient and simple api for rendering common html tags such as title, meta, styles, and scripts. In addition, it has universal/isomorphic-friendly features such as server state serialization, and support for static and non-static pages. HTMLDocument is also well tested and currently used in production on some of our web projects at [Venmo](http://www.venmo.com), so it's safe to use.
