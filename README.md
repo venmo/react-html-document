@@ -48,11 +48,11 @@ app.get('/mypageroute', function(req, res, next) {
   const doc = (
     <HTMLDocument
       title="My Page"
-      scripts=['/scripts/main.js']
-      stylesheets=['/styles/styles.css']
+      scripts={['/scripts/main.js']}
+      stylesheets={['/styles/styles.css']}
       metatags={[
         { name: 'description', content: 'My description' }
-      ]}
+      ]} >
       <MyPage />
     </HTMLDocument>
   );
@@ -80,8 +80,8 @@ app.get('/mypageroute', function(req, res, next) {
         <HTMLDocument
           title="My Page"
           state={state}
-          scripts=['/scripts/main.js']
-          stylesheets=['/styles/styles.css']
+          scripts={['/scripts/main.js']}
+          stylesheets={['/styles/styles.css']} >
           <MyApp {...state} />
         </HTMLDocument>
       );
