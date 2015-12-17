@@ -91,7 +91,7 @@ app.get('/mypageroute', function(req, res, next) {
 });
 
 // later on the client
-const state = window.__state;
+const state = JSON.parse(document.getElementById('__state').dataset.state);
 Render.render(<MyApp {...state} />, document.getElementById('app'));
 ```
 
@@ -112,8 +112,8 @@ Props for Universal Rendering:
 
 | Prop |  Type | Details | Default
 | -------------- | ------ | --------------- | ---- |
-| `state` | object | Contains current server state that will be rendered into a javascript object on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
-| `stateKey` | string | Specifies what key to use when saving the state on the client. `window[stateJSObjectKey] = state;` | `'__state'`
+| `state` | object | Contains current server state that will be rendered into a div element inside a `data-state` attribute on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
+| `stateKey` | string | Specifies what key to use when saving the state on the client. `<div id="stateKey" data-state="state"` | `'__state'`
 
 
 

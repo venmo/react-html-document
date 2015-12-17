@@ -91,18 +91,18 @@ describe('HTMLDocument', () => {
   });
 
   describe('State', () => {
-    it('should render state script', () => {
+    it('should render state div', () => {
+      const state = {
+        user: {
+          name: 'Professor Charles Xavier'
+        }
+      };
       const props = {
-        state: {
-          user: {
-            name: 'Professor Charles Xavier'
-          }
-        },
+        state: state,
         stateKey: '__state'
       };
       const qs = renderAndGetQuerySelector(props);
-      const expectedStateString = `window.${props.stateKey} = {"user":{"name":"Professor Charles Xavier"}};`;
-      expect(qs(`script[data-${props.stateKey}]`).html()).to.equal(expectedStateString);
+      expect(qs(`div#${props.stateKey}`).data('state')).to.deep.equal(state);
     });
 
     it('should use state key for state script data attribute', () => {
@@ -111,17 +111,7 @@ describe('HTMLDocument', () => {
         state: { myState: true }
       };
       const qs = renderAndGetQuerySelector(props);
-      expect(qs(`script[data-${props.stateKey}]`).length).to.equal(1);
-    });
-
-    it('should use state key for state object property', () => {
-      const props = {
-        state: { },
-        stateKey: '__state'
-      };
-      const qs = renderAndGetQuerySelector(props);
-      const stateScript = qs(`script[data-${props.stateKey}]`);
-      expect(stateScript.html()).to.match(/window.__state/);
+      expect(qs(`div#${props.stateKey}`).length).to.equal(1);
     });
   });
 

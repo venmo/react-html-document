@@ -60,19 +60,10 @@ class HTMLDocument extends Component {
     });
   }
 
-  renderStateScript() {
+  renderState() {
     if ( !this.props.state ) return null;
     const { state, stateKey } = this.props;
-    const serverState = `window.${stateKey} = ${JSON.stringify(state)};`;
-    const scriptHTML = { __html: serverState };
-    const stateScriptProps = {
-      [`data-${stateKey}`]: true,
-      key: 'state',
-      dangerouslySetInnerHTML: scriptHTML
-    };
-    return (
-      <script {...stateScriptProps} />
-    );
+    return <div id={stateKey} data-state={JSON.stringify(state)} />;
   }
 
   renderUserScripts() {
@@ -86,12 +77,6 @@ class HTMLDocument extends Component {
     });
   }
 
-  renderScripts() {
-    const stateScript = this.renderStateScript();
-    const userScripts = this.renderUserScripts();
-    return [stateScript].concat(userScripts);
-  }
-
   render() {
     return (
       <html {...this.props.htmlAttributes}>
@@ -102,7 +87,8 @@ class HTMLDocument extends Component {
         </head>
         <body>
           {this.renderChildren()}
-          {this.renderScripts()}
+          {this.renderState()}
+          {this.renderUserScripts()}
         </body>
       </html>
     );
@@ -118,7 +104,7 @@ HTMLDocument.propTypes = {
   state: PropTypes.object,
   stateKey: PropTypes.string,
   stylesheets: PropTypes.array,
-  title: PropTypes.string,
+  title: PropTypes.string
 };
 
 HTMLDocument.defaultProps = {
