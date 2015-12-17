@@ -60,6 +60,18 @@ class HTMLDocument extends Component {
     });
   }
 
+  renderStateDiv() {
+    if ( !this.props.state ) return null;
+    const { state, stateKey } = this.props;
+    const stateScriptProps = {
+      [`data-${stateKey}`]: state,
+      key: 'state'
+    };
+    return (
+      <div {...stateScriptProps} />
+    );
+  }
+
   renderStateScript() {
     if ( !this.props.state ) return null;
     const { state, stateKey } = this.props;
@@ -87,9 +99,10 @@ class HTMLDocument extends Component {
   }
 
   renderScripts() {
-    const stateScript = this.renderStateScript();
+    const state = this.props.useStateDiv ?
+      this.renderStateDiv() : this.renderStateScript();
     const userScripts = this.renderUserScripts();
-    return [stateScript].concat(userScripts);
+    return [state].concat(userScripts);
   }
 
   render() {
@@ -119,6 +132,7 @@ HTMLDocument.propTypes = {
   stateKey: PropTypes.string,
   stylesheets: PropTypes.array,
   title: PropTypes.string,
+  useStateDiv: PropTypes.bool
 };
 
 HTMLDocument.defaultProps = {
@@ -129,7 +143,8 @@ HTMLDocument.defaultProps = {
   state: null,
   stateKey: '__state',
   stylesheets: [],
-  title: ''
+  title: '',
+  useStateDiv: false
 };
 
 

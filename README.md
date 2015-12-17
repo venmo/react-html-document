@@ -114,6 +114,7 @@ Props for Universal Rendering:
 | -------------- | ------ | --------------- | ---- |
 | `state` | object | Contains current server state that will be rendered into a javascript object on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
 | `stateKey` | string | Specifies what key to use when saving the state on the client. `window[stateJSObjectKey] = state;` | `'__state'`
+| `useStateDiv` | boolean | Specifies if it should render the state inside a div using `stateKey` as a data attribute. Useful if you want to escape the state. | `false`
 
 
 

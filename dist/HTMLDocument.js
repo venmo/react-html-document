@@ -93,8 +93,8 @@ var HTMLDocument = (function (_Component) {
       });
     }
   }, {
-    key: 'renderStateScript',
-    value: function renderStateScript() {
+    key: 'renderStateDiv',
+    value: function renderStateDiv() {
       var _stateScriptProps;
 
       if (!this.props.state) return null;
@@ -102,9 +102,22 @@ var HTMLDocument = (function (_Component) {
       var state = _props2.state;
       var stateKey = _props2.stateKey;
 
+      var stateScriptProps = (_stateScriptProps = {}, _defineProperty(_stateScriptProps, 'data-' + stateKey, state), _defineProperty(_stateScriptProps, 'key', 'state'), _stateScriptProps);
+      return _react2['default'].createElement('div', stateScriptProps);
+    }
+  }, {
+    key: 'renderStateScript',
+    value: function renderStateScript() {
+      var _stateScriptProps2;
+
+      if (!this.props.state) return null;
+      var _props3 = this.props;
+      var state = _props3.state;
+      var stateKey = _props3.stateKey;
+
       var serverState = 'window.' + stateKey + ' = ' + JSON.stringify(state) + ';';
       var scriptHTML = { __html: serverState };
-      var stateScriptProps = (_stateScriptProps = {}, _defineProperty(_stateScriptProps, 'data-' + stateKey, true), _defineProperty(_stateScriptProps, 'key', 'state'), _defineProperty(_stateScriptProps, 'dangerouslySetInnerHTML', scriptHTML), _stateScriptProps);
+      var stateScriptProps = (_stateScriptProps2 = {}, _defineProperty(_stateScriptProps2, 'data-' + stateKey, true), _defineProperty(_stateScriptProps2, 'key', 'state'), _defineProperty(_stateScriptProps2, 'dangerouslySetInnerHTML', scriptHTML), _stateScriptProps2);
       return _react2['default'].createElement('script', stateScriptProps);
     }
   }, {
@@ -123,16 +136,16 @@ var HTMLDocument = (function (_Component) {
   }, {
     key: 'renderScripts',
     value: function renderScripts() {
-      var stateScript = this.renderStateScript();
+      var state = this.props.useStateDiv ? this.renderStateDiv() : this.renderStateScript();
       var userScripts = this.renderUserScripts();
-      return [stateScript].concat(userScripts);
+      return [state].concat(userScripts);
     }
   }, {
     key: 'render',
     value: function render() {
       return _react2['default'].createElement(
         'html',
-        null,
+        this.props.htmlAttributes,
         _react2['default'].createElement(
           'head',
           null,
@@ -160,22 +173,26 @@ var HTMLDocument = (function (_Component) {
 HTMLDocument.propTypes = {
   childrenContainerId: _react.PropTypes.string,
   children: _react.PropTypes.node,
+  htmlAttributes: _react.PropTypes.object,
   metatags: _react.PropTypes.array,
   scripts: _react.PropTypes.array,
   state: _react.PropTypes.object,
   stateKey: _react.PropTypes.string,
   stylesheets: _react.PropTypes.array,
-  title: _react.PropTypes.string
+  title: _react.PropTypes.string,
+  useStateDiv: _react.PropTypes.bool
 };
 
 HTMLDocument.defaultProps = {
   childrenContainerId: 'app',
+  htmlAttributes: {},
   metatags: [],
   scripts: [],
   state: null,
   stateKey: '__state',
   stylesheets: [],
-  title: ''
+  title: '',
+  useStateDiv: false
 };
 
 exports['default'] = HTMLDocument;

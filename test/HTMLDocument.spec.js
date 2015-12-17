@@ -123,6 +123,21 @@ describe('HTMLDocument', () => {
       const stateScript = qs(`script[data-${props.stateKey}]`);
       expect(stateScript.html()).to.match(/window.__state/);
     });
+
+    it('should render state div', () => {
+      const state = {
+        user: {
+          name: 'Professor Charles Xavier'
+        }
+      };
+      const props = {
+        useStateDiv: true,
+        state: JSON.stringify(state),
+        stateKey: '__state'
+      };
+      const qs = renderAndGetQuerySelector(props);
+      expect(qs(`div[data-${props.stateKey}]`).data(props.stateKey)).to.deep.equal(state);
+    });
   });
 
   describe('Scripts', () => {
