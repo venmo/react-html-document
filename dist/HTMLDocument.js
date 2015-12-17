@@ -12,8 +12,6 @@ var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_ag
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -93,32 +91,14 @@ var HTMLDocument = (function (_Component) {
       });
     }
   }, {
-    key: 'renderStateDiv',
-    value: function renderStateDiv() {
-      var _stateScriptProps;
-
+    key: 'renderState',
+    value: function renderState() {
       if (!this.props.state) return null;
       var _props2 = this.props;
       var state = _props2.state;
       var stateKey = _props2.stateKey;
 
-      var stateScriptProps = (_stateScriptProps = {}, _defineProperty(_stateScriptProps, 'data-' + stateKey, state), _defineProperty(_stateScriptProps, 'key', 'state'), _stateScriptProps);
-      return _react2['default'].createElement('div', stateScriptProps);
-    }
-  }, {
-    key: 'renderStateScript',
-    value: function renderStateScript() {
-      var _stateScriptProps2;
-
-      if (!this.props.state) return null;
-      var _props3 = this.props;
-      var state = _props3.state;
-      var stateKey = _props3.stateKey;
-
-      var serverState = 'window.' + stateKey + ' = ' + JSON.stringify(state) + ';';
-      var scriptHTML = { __html: serverState };
-      var stateScriptProps = (_stateScriptProps2 = {}, _defineProperty(_stateScriptProps2, 'data-' + stateKey, true), _defineProperty(_stateScriptProps2, 'key', 'state'), _defineProperty(_stateScriptProps2, 'dangerouslySetInnerHTML', scriptHTML), _stateScriptProps2);
-      return _react2['default'].createElement('script', stateScriptProps);
+      return _react2['default'].createElement('div', { id: stateKey, 'data-state': JSON.stringify(state) });
     }
   }, {
     key: 'renderUserScripts',
@@ -132,13 +112,6 @@ var HTMLDocument = (function (_Component) {
         var renderedTag = scriptProps.inline ? _this2.renderInlineScript(scriptProps.inline) : _this2.renderSourcedScript(scriptProps.src);
         return renderedTag;
       });
-    }
-  }, {
-    key: 'renderScripts',
-    value: function renderScripts() {
-      var state = this.props.useStateDiv ? this.renderStateDiv() : this.renderStateScript();
-      var userScripts = this.renderUserScripts();
-      return [state].concat(userScripts);
     }
   }, {
     key: 'render',
@@ -161,7 +134,8 @@ var HTMLDocument = (function (_Component) {
           'body',
           null,
           this.renderChildren(),
-          this.renderScripts()
+          this.renderState(),
+          this.renderUserScripts()
         )
       );
     }
@@ -176,11 +150,10 @@ HTMLDocument.propTypes = {
   htmlAttributes: _react.PropTypes.object,
   metatags: _react.PropTypes.array,
   scripts: _react.PropTypes.array,
-  state: _react.PropTypes.object,
+  state: _react.PropTypes.string,
   stateKey: _react.PropTypes.string,
   stylesheets: _react.PropTypes.array,
-  title: _react.PropTypes.string,
-  useStateDiv: _react.PropTypes.bool
+  title: _react.PropTypes.string
 };
 
 HTMLDocument.defaultProps = {
@@ -191,8 +164,7 @@ HTMLDocument.defaultProps = {
   state: null,
   stateKey: '__state',
   stylesheets: [],
-  title: '',
-  useStateDiv: false
+  title: ''
 };
 
 exports['default'] = HTMLDocument;
