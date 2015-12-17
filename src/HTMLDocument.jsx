@@ -101,7 +101,7 @@ HTMLDocument.propTypes = {
   htmlAttributes: PropTypes.object,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
-  state: PropTypes.string,
+  state: PropTypes.object,
   stateKey: PropTypes.string,
   stylesheets: PropTypes.array,
   title: PropTypes.string

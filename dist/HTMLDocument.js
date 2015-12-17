@@ -150,7 +150,7 @@ HTMLDocument.propTypes = {
   htmlAttributes: _react.PropTypes.object,
   metatags: _react.PropTypes.array,
   scripts: _react.PropTypes.array,
-  state: _react.PropTypes.string,
+  state: _react.PropTypes.object,
   stateKey: _react.PropTypes.string,
   stylesheets: _react.PropTypes.array,
   title: _react.PropTypes.string
