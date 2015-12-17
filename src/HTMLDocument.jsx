@@ -60,31 +60,10 @@ class HTMLDocument extends Component {
     });
   }
 
-  renderStateDiv() {
+  renderState() {
     if ( !this.props.state ) return null;
     const { state, stateKey } = this.props;
-    const stateScriptProps = {
-      [`data-${stateKey}`]: state,
-      key: 'state'
-    };
-    return (
-      <div {...stateScriptProps} />
-    );
-  }
-
-  renderStateScript() {
-    if ( !this.props.state ) return null;
-    const { state, stateKey } = this.props;
-    const serverState = `window.${stateKey} = ${JSON.stringify(state)};`;
-    const scriptHTML = { __html: serverState };
-    const stateScriptProps = {
-      [`data-${stateKey}`]: true,
-      key: 'state',
-      dangerouslySetInnerHTML: scriptHTML
-    };
-    return (
-      <script {...stateScriptProps} />
-    );
+    return <div id={stateKey} data-state={JSON.stringify(state)} />;
   }
 
   renderUserScripts() {
@@ -98,13 +77,6 @@ class HTMLDocument extends Component {
     });
   }
 
-  renderScripts() {
-    const state = this.props.useStateDiv ?
-      this.renderStateDiv() : this.renderStateScript();
-    const userScripts = this.renderUserScripts();
-    return [state].concat(userScripts);
-  }
-
   render() {
     return (
       <html {...this.props.htmlAttributes}>
@@ -115,7 +87,8 @@ class HTMLDocument extends Component {
         </head>
         <body>
           {this.renderChildren()}
-          {this.renderScripts()}
+          {this.renderState()}
+          {this.renderUserScripts()}
         </body>
       </html>
     );
@@ -128,11 +101,10 @@ HTMLDocument.propTypes = {
   htmlAttributes: PropTypes.object,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
-  state: PropTypes.object,
+  state: PropTypes.string,
   stateKey: PropTypes.string,
   stylesheets: PropTypes.array,
-  title: PropTypes.string,
-  useStateDiv: PropTypes.bool
+  title: PropTypes.string
 };
 
 HTMLDocument.defaultProps = {
@@ -143,8 +115,7 @@ HTMLDocument.defaultProps = {
   state: null,
   stateKey: '__state',
   stylesheets: [],
-  title: '',
-  useStateDiv: false
+  title: ''
 };
 
 
