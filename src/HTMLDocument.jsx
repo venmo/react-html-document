@@ -36,9 +36,9 @@ class HTMLDocument extends Component {
     );
   }
 
-  renderSourcedScript(src) {
+  renderSourcedScript(props) {
     return (
-      <script key={src} src={src} />
+      <script {...props} />
     );
   }
 
@@ -72,7 +72,7 @@ class HTMLDocument extends Component {
       const scriptProps = typeof props === 'string' ? { src: props } : props;
       const renderedTag = scriptProps.inline ?
         this.renderInlineScript(scriptProps.inline) :
-        this.renderSourcedScript(scriptProps.src);
+        this.renderSourcedScript(scriptProps);
       return renderedTag;
     });
   }
