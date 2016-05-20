@@ -24,14 +24,15 @@
   ],
   "author": {
     "name": "Xavier E. López",
-    "email": "xavier@venmo.com"
+    "email": "xavier.lopez@venmo.com"
   },
   "bugs": {
     "url": "https://github.com/venmo/react-html-document/issues"
   },
   "license": "MIT",
   "peerDependencies": {
-    "react": "0.14.x"
+    "react": "0.14.x || 15.x.x",
+    "react-dom": "0.14.x || 15.x.x"
   },
   "devDependencies": {
     "babel": "^5.6.14",
@@ -42,9 +43,9 @@
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
     "mocha": "^2.3.3",
-    "react": "^0.14.0"
+    "react": "^15.0.2"
   },
   "dependencies": {
-    "react-dom": "^0.14.0"
+    "react-dom": "^15.0.2"
   }
 }
