@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom/server';
 
+import { STATE_SCRIPT_ID, ASSET_TYPES } from './constants';
+import readFile from './readFile';
+
 
 class HTMLDocument extends Component {
 
@@ -18,63 +21,57 @@ class HTMLDocument extends Component {
 
   renderMetatags() {
     const { metatags } = this.props;
-    return metatags.map((props, index) => {
-      return <meta key={index} {...props} />;
-    });
+    return metatags.map((props, index) => <meta key={index} {...props} />);
   }
 
-  renderLinkedStylesheet(href) {
-    return (
-      <link key={href} rel="stylesheet" href={href} />
-    );
+  renderInlineAsset(type, html) {
+    const innerHTML = { __html: html };
+    if ( type === ASSET_TYPES.STYLESHEET ) {
+      return <style key={html} dangerouslySetInnerHTML={innerHTML} />;
+    }
+    return <script key={html} dangerouslySetInnerHTML={innerHTML} />;
   }
 
-  renderInlineStyle(css) {
-    const cssHTML = { __html: css };
-    return (
-      <style key={css} dangerouslySetInnerHTML={cssHTML} />
-    );
+  renderImportedAsset(type, { src, href } ) {
+    if ( type === ASSET_TYPES.STYLESHEET ) {
+      return <link key={src} rel="stylesheet" href={href} />;
+    }
+    return <script key={src} src={src} />;
   }
 
-  renderSourcedScript(props) {
-    return (
-      <script {...props} />
-    );
-  }
-
-  renderInlineScript(js) {
-    const scriptHTML = { __html: js };
-    return (
-      <script key={js} dangerouslySetInnerHTML={scriptHTML} />
-    );
+  renderAsset(type, props) {
+    if ( props.inline ) {
+      const html = props.inline;
+      return this.renderInlineAsset(type, html);
+    } else if ( props.file ) {
+      const html = readFile(props.file).contents;
+      return this.renderInlineAsset(type, html);
+    }
+    return this.renderImportedAsset(type, props);
   }
 
   renderStylesheets() {
     const { stylesheets } = this.props;
     return stylesheets.map(props => {
-      const linkProps = typeof props === 'string' ? { href: props } : props;
-      const renderedTag = linkProps.inline ?
-        this.renderInlineStyle(linkProps.inline) :
-        this.renderLinkedStylesheet(linkProps.href);
-      return renderedTag;
+      const stylesheetProps = typeof props === 'string' ? { href: props } : props;
+      return this.renderAsset(ASSET_TYPES.STYLESHEET, stylesheetProps);
+    });
+  }
+
+  renderScripts() {
+    const { scripts } = this.props;
+    return scripts.map(props => {
+      const scriptProps = typeof props === 'string' ? { src: props } : props;
+      return this.renderAsset(ASSET_TYPES.SCRIPT, scriptProps);
     });
   }
 
   renderState() {
     if ( !this.props.state ) return null;
-    const { state, stateKey } = this.props;
-    return <div id={stateKey} data-state={JSON.stringify(state)} />;
-  }
-
-  renderUserScripts() {
-    const { scripts } = this.props;
-    return scripts.map(props => {
-      const scriptProps = typeof props === 'string' ? { src: props } : props;
-      const renderedTag = scriptProps.inline ?
-        this.renderInlineScript(scriptProps.inline) :
-        this.renderSourcedScript(scriptProps);
-      return renderedTag;
-    });
+    const { state } = this.props;
+    const stringifiedState = JSON.stringify(state);
+    const innerHTML = { __html: stringifiedState };
+    return <script id={STATE_SCRIPT_ID} type="application/json" dangerouslySetInnerHTML={innerHTML}/>;
   }
 
   render() {
@@ -88,7 +85,7 @@ class HTMLDocument extends Component {
         <body>
           {this.renderChildren()}
           {this.renderState()}
-          {this.renderUserScripts()}
+          {this.renderScripts()}
         </body>
       </html>
     );
@@ -102,7 +99,6 @@ HTMLDocument.propTypes = {
   metatags: PropTypes.array,
   scripts: PropTypes.array,
   state: PropTypes.object,
-  stateKey: PropTypes.string,
   stylesheets: PropTypes.array,
   title: PropTypes.string
 };
@@ -113,7 +109,6 @@ HTMLDocument.defaultProps = {
   metatags: [],
   scripts: [],
   state: null,
-  stateKey: '__state',
   stylesheets: [],
   title: ''
 };

@@ -1,16 +1,13 @@
 import React from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
+import path from 'path';
+import fs from 'fs';
 import { expect } from 'chai';
-import cheerio from 'cheerio';
-import HTMLDocument from '../src/HTMLDocument';
 
+import { STATE_SCRIPT_ID } from '../src/constants';
+
+import { renderAndGetQuerySelector } from './utils';
 import TestApp from './TestApp';
 
-function renderAndGetQuerySelector(props, children) {
-  const htmlDocumentEl = <HTMLDocument {...props}>{children}</HTMLDocument>;
-  const markup = renderToStaticMarkup(htmlDocumentEl);
-  return cheerio.load(markup);
-}
 
 describe('HTMLDocument', () => {
   it('should render with default props', () => {
@@ -88,30 +85,43 @@ describe('HTMLDocument', () => {
       expect($styles.length).to.equal(1);
       expect($styles.html()).to.equal(props.stylesheets[0].inline);
     });
+
+    it('should render stylesheets from files', () => {
+      const file = path.join(__dirname, 'test-css.css');
+      const props = {
+        stylesheets: [
+          { file }
+        ]
+      };
+      const styleSheetContents = fs.readFileSync(file, 'utf-8');
+      const qs = renderAndGetQuerySelector(props);
+      const $styles = qs('style');
+      expect($styles.length).to.equal(1);
+      expect($styles.html()).to.equal(styleSheetContents);
+    });
   });
 
   describe('State', () => {
-    it('should render state div', () => {
+    it('should render state script', () => {
       const state = {
         user: {
           name: 'Professor Charles Xavier'
         }
       };
       const props = {
-        state: state,
-        stateKey: '__state'
+        state
       };
       const qs = renderAndGetQuerySelector(props);
-      expect(qs(`div#${props.stateKey}`).data('state')).to.deep.equal(state);
+      const stateFromDOM = JSON.parse(qs(`script#${STATE_SCRIPT_ID}`).text());
+      expect(stateFromDOM).to.deep.equal(state);
     });
 
-    it('should use state key for state script data attribute', () => {
+    it('should use internal state key as state script id', () => {
       const props = {
-        stateKey: '__state',
         state: { myState: true }
       };
       const qs = renderAndGetQuerySelector(props);
-      expect(qs(`div#${props.stateKey}`).length).to.equal(1);
+      expect(qs(`script#${STATE_SCRIPT_ID}`).length).to.equal(1);
     });
   });
 
@@ -146,13 +156,26 @@ describe('HTMLDocument', () => {
       const props = {
         scripts: [
           { inline: 'window.myApp = true;' }
-        ],
-        stateKey: '__state'
+        ]
       };
       const qs = renderAndGetQuerySelector(props);
-      const $scripts = qs('script').not(`script[data-${props.stateKey}]`);
+      const $scripts = qs('script').not(`script#${STATE_SCRIPT_ID}`);
       expect($scripts.length).to.equal(1);
       expect($scripts.html()).to.equal(props.scripts[0].inline);
+    });
+
+    it('should render scripts from files', () => {
+      const file = path.join(__dirname, 'test-script.js');
+      const props = {
+        scripts: [
+          { file }
+        ]
+      };
+      const scriptContents = fs.readFileSync(file, 'utf-8');
+      const qs = renderAndGetQuerySelector(props);
+      const $scripts = qs('script').not(`script#${STATE_SCRIPT_ID}`);
+      expect($scripts.length).to.equal(1);
+      expect($scripts.html()).to.equal(scriptContents);
     });
   });
 

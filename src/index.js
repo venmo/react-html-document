@@ -1,2 +1,3 @@
 import HTMLDocument from './HTMLDocument';
-export default HTMLDocument;
+import { getServerState } from './client';
+export { getServerState, HTMLDocument as default };
