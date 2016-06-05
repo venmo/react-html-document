@@ -1,6 +1,6 @@
 {
   "name": "react-html-document",
-  "version": "2.1.0",
+  "version": "3.0.0-beta",
   "description": "A foundational React component useful for rendering full html documents on the server.",
   "main": "dist/index.js",
   "repository": {
