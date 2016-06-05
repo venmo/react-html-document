@@ -1,3 +1,3 @@
 import HTMLDocument from './HTMLDocument';
-import { getServerState } from './client';
-export { getServerState, HTMLDocument as default };
+import { getUniversalState } from './client';
+export { getUniversalState, HTMLDocument as default };
