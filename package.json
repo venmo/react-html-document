@@ -10,7 +10,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel/register --recursive",
     "build": "babel src --out-dir dist",
-    "dev": "babel-node dev-server.js",
+    "dev": "babel-node example-usage-server.js",
     "lint": "eslint src test"
   },
   "keywords": [
