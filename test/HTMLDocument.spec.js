@@ -102,23 +102,23 @@ describe('HTMLDocument', () => {
   });
 
   describe('State', () => {
-    it('should render state script', () => {
-      const state = {
+    it('should render universalState script', () => {
+      const universalState = {
         user: {
           name: 'Professor Charles Xavier'
         }
       };
       const props = {
-        state
+        universalState
       };
       const qs = renderAndGetQuerySelector(props);
-      const stateFromDOM = JSON.parse(qs(`script#${STATE_SCRIPT_ID}`).text());
-      expect(stateFromDOM).to.deep.equal(state);
+      const universalStateFromDOM = JSON.parse(qs(`script#${STATE_SCRIPT_ID}`).text());
+      expect(universalStateFromDOM).to.deep.equal(universalState);
     });
 
-    it('should use internal state key as state script id', () => {
+    it('should use internal universalState key as universalState script id', () => {
       const props = {
-        state: { myState: true }
+        universalState: { myuniversalState: true }
       };
       const qs = renderAndGetQuerySelector(props);
       expect(qs(`script#${STATE_SCRIPT_ID}`).length).to.equal(1);
@@ -131,10 +131,10 @@ describe('HTMLDocument', () => {
         scripts: [
           'mysite.com/main.js'
         ],
-        stateKey: '__state'
+        universalStateKey: '__universalState'
       };
       const qs = renderAndGetQuerySelector(props);
-      const $scripts = qs('script').not(`[data-${props.stateKey}]`);
+      const $scripts = qs('script').not(`[data-${props.universalStateKey}]`);
       expect($scripts.length).to.equal(1);
       expect($scripts.get(0).attribs.src).to.equal(props.scripts[0]);
     });
@@ -144,10 +144,10 @@ describe('HTMLDocument', () => {
         scripts: [
           { src: 'mysite.com/main.js' }
         ],
-        stateKey: '__state'
+        universalStateKey: '__universalState'
       };
       const qs = renderAndGetQuerySelector(props);
-      const $scripts = qs('script').not(`script[data-${props.stateKey}]`);
+      const $scripts = qs('script').not(`script[data-${props.universalStateKey}]`);
       expect($scripts.length).to.equal(1);
       expect($scripts.get(0).attribs.src).to.equal(props.scripts[0].src);
     });
@@ -202,7 +202,7 @@ describe('HTMLDocument', () => {
       expect(qs(`#${props.childrenContainerId}`).text()).to.equal(testAppProps.message);
     });
 
-    it('should render children statically when given no state', () => {
+    it('should render children statically when given no universalState', () => {
       const props = { };
       const children = <TestApp />;
       const qs = renderAndGetQuerySelector(props, children);
@@ -210,9 +210,9 @@ describe('HTMLDocument', () => {
       expect(qs(reactSelector).length).to.equal(0);
     });
 
-    it('should render children with react ids for client mounting when given state', () => {
+    it('should render children with react ids for client mounting when given universalState', () => {
       const props = {
-        state: { myState: true }
+        universalState: { myuniversalState: true }
       };
       const children = <TestApp />;
       const qs = renderAndGetQuerySelector(props, children);

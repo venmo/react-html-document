@@ -9,8 +9,8 @@ class HTMLDocument extends Component {
 
   renderChildren() {
     if ( !this.props.children ) return null;
-    const { children, childrenContainerId, state } = this.props;
-    const markup = state ?
+    const { children, childrenContainerId, universalState } = this.props;
+    const markup = universalState ?
       ReactDOM.renderToString(children) :
       ReactDOM.renderToStaticMarkup(children);
     const childrenHTML = { __html: markup };
@@ -66,11 +66,11 @@ class HTMLDocument extends Component {
     });
   }
 
-  renderState() {
-    if ( !this.props.state ) return null;
-    const { state } = this.props;
-    const stringifiedState = JSON.stringify(state);
-    const innerHTML = { __html: stringifiedState };
+  renderUniversalStateScript() {
+    if ( !this.props.universalState ) return null;
+    const { universalState } = this.props;
+    const stringifiedUniversalState = JSON.stringify(universalState);
+    const innerHTML = { __html: stringifiedUniversalState };
     return <script id={STATE_SCRIPT_ID} type="application/json" dangerouslySetInnerHTML={innerHTML}/>;
   }
 
@@ -84,7 +84,7 @@ class HTMLDocument extends Component {
         </head>
         <body>
           {this.renderChildren()}
-          {this.renderState()}
+          {this.renderUniversalStateScript()}
           {this.renderScripts()}
         </body>
       </html>
@@ -98,9 +98,9 @@ HTMLDocument.propTypes = {
   htmlAttributes: PropTypes.object,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
-  state: PropTypes.object,
   stylesheets: PropTypes.array,
-  title: PropTypes.string
+  title: PropTypes.string,
+  universalState: PropTypes.object
 };
 
 HTMLDocument.defaultProps = {
@@ -108,9 +108,9 @@ HTMLDocument.defaultProps = {
   htmlAttributes: {},
   metatags: [],
   scripts: [],
-  state: null,
   stylesheets: [],
-  title: ''
+  title: '',
+  universalState: null
 };
 
 

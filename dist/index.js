@@ -10,5 +10,7 @@ var _HTMLDocument = require('./HTMLDocument');
 
 var _HTMLDocument2 = _interopRequireDefault(_HTMLDocument);
 
+var _client = require('./client');
+
+exports.getServerState = _client.getServerState;
 exports['default'] = _HTMLDocument2['default'];
-module.exports = exports['default'];

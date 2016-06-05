@@ -25,7 +25,7 @@ This assumes that you’re using [npm](http://npmjs.com/).
 Basic static page:
 ```es6
 import HTMLDocument from 'react-html-document';
-import ReactDOM from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 
 app.get('/mypageroute', function(req, res, next) {
   const doc = (
@@ -33,7 +33,7 @@ app.get('/mypageroute', function(req, res, next) {
       <h1>Hello World</h1>
     </HTMLDocument>
   );
-  const markup = ReactDOM.renderToStaticMarkup(doc);
+  const markup = ReactDOMServer.renderToStaticMarkup(doc);
   return res.send(markup);
 });
 ```
@@ -42,7 +42,7 @@ Static page with scripts, stylesheets, and meta tags:
 
 ```es6
 import HTMLDocument from 'react-html-document';
-import ReactDOM from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 
 app.get('/mypageroute', function(req, res, next) {
   const doc = (
@@ -56,7 +56,7 @@ app.get('/mypageroute', function(req, res, next) {
       <MyPage />
     </HTMLDocument>
   );
-  const markup = ReactDOM.renderToStaticMarkup(doc);
+  const markup = ReactDOMServer.renderToStaticMarkup(doc);
   return res.send(markup);
 });
 ```
@@ -65,7 +65,7 @@ Universal page with state:
 
 ```es6
 import HTMLDocument from 'react-html-document';
-import ReactDOM from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 
 /**
 * for illustration purposes, getStateForURL is an unimplemented function that
@@ -79,19 +79,20 @@ app.get('/mypageroute', function(req, res, next) {
       const doc = (
         <HTMLDocument
           title="My Page"
-          state={state}
+          universalState={state}
           scripts={['/scripts/main.js']}
           stylesheets={['/styles/styles.css']} >
           <MyApp {...state} />
         </HTMLDocument>
       );
-      const markup = ReactDOM.renderToStaticMarkup(doc);
+      const markup = ReactDOMServer.renderToStaticMarkup(doc);
       return res.send(markup);
     });
 });
 
 // later on the client
-const state = JSON.parse(document.getElementById('__state').dataset.state);
+import { getUniversalState } from 'react-html-document';
+const state = getUniversalState();
 Render.render(<MyApp {...state} />, document.getElementById('app'));
 ```
 
@@ -112,19 +113,21 @@ Props for Universal Rendering:
 
 | Prop |  Type | Details | Default
 | -------------- | ------ | --------------- | ---- |
-| `state` | object | Contains current server state that will be rendered into a div element inside a `data-state` attribute on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
-| `stateKey` | string | Specifies what key to use when saving the state on the client. `<div id="stateKey" data-state="state"` | `'__state'`
+| `universalState` | object | Contains current server state that will be rendered into a script tag of type `application/json` on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
 
 
 
 ### Development
 Please take a look at `package.json` for available npm scripts.
 
+For starting a dev server: `npm run dev`
+
 For running mocha tests: `npm test`
 
 For compiling `src` directory into `dist` directory with babel: `npm run build`
 
 For linting with eslint: `npm run lint`
+
 
 
 ### Contributing

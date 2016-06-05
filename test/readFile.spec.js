@@ -18,7 +18,7 @@ describe('readFile', () => {
     expect(readFile.bind(null, file)).to.throw(new RegExp(ERRORS.FILE));
   });
 
-  it('reads file contents from cache after being called once', () => {
+  it('reads file contents from memory cache after being called once', () => {
     const file = path.join(__dirname, 'test-script.js');
     const expectedFileContents = fs.readFileSync(file, 'utf-8');
     clearCache();
