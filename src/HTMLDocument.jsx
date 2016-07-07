@@ -32,11 +32,11 @@ class HTMLDocument extends Component {
     return <script key={html} dangerouslySetInnerHTML={innerHTML} />;
   }
 
-  renderImportedAsset(type, { src, href } ) {
+  renderImportedAsset(type, props ) {
     if ( type === ASSET_TYPES.STYLESHEET ) {
-      return <link key={src} rel="stylesheet" href={href} />;
+      return <link key={props.href} rel="stylesheet" {...props} />;
     }
-    return <script key={src} src={src} />;
+    return <script key={props.src} {...props} />;
   }
 
   renderAsset(type, props) {

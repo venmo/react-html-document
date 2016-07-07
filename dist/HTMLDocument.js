@@ -72,14 +72,11 @@ var HTMLDocument = (function (_Component) {
     }
   }, {
     key: 'renderImportedAsset',
-    value: function renderImportedAsset(type, _ref) {
-      var src = _ref.src;
-      var href = _ref.href;
-
+    value: function renderImportedAsset(type, props) {
       if (type === _constants.ASSET_TYPES.STYLESHEET) {
-        return _react2['default'].createElement('link', { key: src, rel: 'stylesheet', href: href });
+        return _react2['default'].createElement('link', _extends({ key: props.href, rel: 'stylesheet' }, props));
       }
-      return _react2['default'].createElement('script', { key: src, src: src });
+      return _react2['default'].createElement('script', _extends({ key: props.src }, props));
     }
   }, {
     key: 'renderAsset',
