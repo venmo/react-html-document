@@ -24,6 +24,12 @@ var _reactDomServer = require('react-dom/server');
 
 var _reactDomServer2 = _interopRequireDefault(_reactDomServer);
 
+var _constants = require('./constants');
+
+var _readFile = require('./readFile');
+
+var _readFile2 = _interopRequireDefault(_readFile);
+
 var HTMLDocument = (function (_Component) {
   _inherits(HTMLDocument, _Component);
 
@@ -40,9 +46,9 @@ var HTMLDocument = (function (_Component) {
       var _props = this.props;
       var children = _props.children;
       var childrenContainerId = _props.childrenContainerId;
-      var state = _props.state;
+      var universalState = _props.universalState;
 
-      var markup = state ? _reactDomServer2['default'].renderToString(children) : _reactDomServer2['default'].renderToStaticMarkup(children);
+      var markup = universalState ? _reactDomServer2['default'].renderToString(children) : _reactDomServer2['default'].renderToStaticMarkup(children);
       var childrenHTML = { __html: markup };
       return _react2['default'].createElement('div', { key: childrenContainerId, id: childrenContainerId, dangerouslySetInnerHTML: childrenHTML });
     }
@@ -56,26 +62,33 @@ var HTMLDocument = (function (_Component) {
       });
     }
   }, {
-    key: 'renderLinkedStylesheet',
-    value: function renderLinkedStylesheet(href) {
-      return _react2['default'].createElement('link', { key: href, rel: 'stylesheet', href: href });
+    key: 'renderInlineAsset',
+    value: function renderInlineAsset(type, html) {
+      var innerHTML = { __html: html };
+      if (type === _constants.ASSET_TYPES.STYLESHEET) {
+        return _react2['default'].createElement('style', { key: html, dangerouslySetInnerHTML: innerHTML });
+      }
+      return _react2['default'].createElement('script', { key: html, dangerouslySetInnerHTML: innerHTML });
     }
   }, {
-    key: 'renderInlineStyle',
-    value: function renderInlineStyle(css) {
-      var cssHTML = { __html: css };
-      return _react2['default'].createElement('style', { key: css, dangerouslySetInnerHTML: cssHTML });
+    key: 'renderImportedAsset',
+    value: function renderImportedAsset(type, props) {
+      if (type === _constants.ASSET_TYPES.STYLESHEET) {
+        return _react2['default'].createElement('link', _extends({ key: props.href, rel: 'stylesheet' }, props));
+      }
+      return _react2['default'].createElement('script', _extends({ key: props.src }, props));
     }
   }, {
-    key: 'renderSourcedScript',
-    value: function renderSourcedScript(src) {
-      return _react2['default'].createElement('script', { key: src, src: src });
-    }
-  }, {
-    key: 'renderInlineScript',
-    value: function renderInlineScript(js) {
-      var scriptHTML = { __html: js };
-      return _react2['default'].createElement('script', { key: js, dangerouslySetInnerHTML: scriptHTML });
+    key: 'renderAsset',
+    value: function renderAsset(type, props) {
+      if (props.inline) {
+        var html = props.inline;
+        return this.renderInlineAsset(type, html);
+      } else if (props.file) {
+        var html = (0, _readFile2['default'])(props.file).contents;
+        return this.renderInlineAsset(type, html);
+      }
+      return this.renderImportedAsset(type, props);
     }
   }, {
     key: 'renderStylesheets',
@@ -85,33 +98,31 @@ var HTMLDocument = (function (_Component) {
       var stylesheets = this.props.stylesheets;
 
       return stylesheets.map(function (props) {
-        var linkProps = typeof props === 'string' ? { href: props } : props;
-        var renderedTag = linkProps.inline ? _this.renderInlineStyle(linkProps.inline) : _this.renderLinkedStylesheet(linkProps.href);
-        return renderedTag;
+        var stylesheetProps = typeof props === 'string' ? { href: props } : props;
+        return _this.renderAsset(_constants.ASSET_TYPES.STYLESHEET, stylesheetProps);
       });
     }
   }, {
-    key: 'renderState',
-    value: function renderState() {
-      if (!this.props.state) return null;
-      var _props2 = this.props;
-      var state = _props2.state;
-      var stateKey = _props2.stateKey;
-
-      return _react2['default'].createElement('div', { id: stateKey, 'data-state': JSON.stringify(state) });
-    }
-  }, {
-    key: 'renderUserScripts',
-    value: function renderUserScripts() {
+    key: 'renderScripts',
+    value: function renderScripts() {
       var _this2 = this;
 
       var scripts = this.props.scripts;
 
       return scripts.map(function (props) {
         var scriptProps = typeof props === 'string' ? { src: props } : props;
-        var renderedTag = scriptProps.inline ? _this2.renderInlineScript(scriptProps.inline) : _this2.renderSourcedScript(scriptProps.src);
-        return renderedTag;
+        return _this2.renderAsset(_constants.ASSET_TYPES.SCRIPT, scriptProps);
       });
+    }
+  }, {
+    key: 'renderUniversalStateScript',
+    value: function renderUniversalStateScript() {
+      if (!this.props.universalState) return null;
+      var universalState = this.props.universalState;
+
+      var stringifiedUniversalState = JSON.stringify(universalState);
+      var innerHTML = { __html: stringifiedUniversalState };
+      return _react2['default'].createElement('script', { id: _constants.STATE_SCRIPT_ID, type: 'application/json', dangerouslySetInnerHTML: innerHTML });
     }
   }, {
     key: 'render',
@@ -134,8 +145,8 @@ var HTMLDocument = (function (_Component) {
           'body',
           null,
           this.renderChildren(),
-          this.renderState(),
-          this.renderUserScripts()
+          this.renderUniversalStateScript(),
+          this.renderScripts()
         )
       );
     }
@@ -150,10 +161,9 @@ HTMLDocument.propTypes = {
   htmlAttributes: _react.PropTypes.object,
   metatags: _react.PropTypes.array,
   scripts: _react.PropTypes.array,
-  state: _react.PropTypes.object,
-  stateKey: _react.PropTypes.string,
   stylesheets: _react.PropTypes.array,
-  title: _react.PropTypes.string
+  title: _react.PropTypes.string,
+  universalState: _react.PropTypes.object
 };
 
 HTMLDocument.defaultProps = {
@@ -161,10 +171,9 @@ HTMLDocument.defaultProps = {
   htmlAttributes: {},
   metatags: [],
   scripts: [],
-  state: null,
-  stateKey: '__state',
   stylesheets: [],
-  title: ''
+  title: '',
+  universalState: null
 };
 
 exports['default'] = HTMLDocument;

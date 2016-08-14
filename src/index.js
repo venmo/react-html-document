@@ -1,2 +1,3 @@
 import HTMLDocument from './HTMLDocument';
-export default HTMLDocument;
+import getUniversalState from './client';
+export { getUniversalState, HTMLDocument as default };

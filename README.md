@@ -1,4 +1,8 @@
+
+![HTMLDocument](/logo.png)
+
 # HTMLDocument
+
 
 [![Version](https://img.shields.io/github/release/venmo/react-html-document.svg)](https://github.com/venmo/react-html-document/releases)
 [![build status](https://img.shields.io/travis/venmo/react-html-document/master.svg?style=flat-square)](https://travis-ci.org/venmo/react-html-document)
@@ -6,9 +10,17 @@
 
 HTMLDocument is a foundational [React](https://facebook.github.io/react/) component useful for rendering full html documents on the server.
 
-It provides a convenient and simple api for rendering common html tags such as title, meta, stylesheets, and scripts. In addition, it has universal/isomorphic-friendly features such as server state serialization, and support for static and non-static pages. HTMLDocument is also well tested and currently used in production on some of our web projects at [Venmo](http://www.venmo.com), so it's safe to use.
+** **  
 
-You no longer need to write boilerplate html strings or roll out your own custom HTML component from scratch on every project you start. Have fun using it!
+You'll love **HTMLDocument** if:
+* You love (or would love) to use React to render full documents on the server without the need for templates, view engines, or static files.
+* You want to render documents in a way that makes it really easy to share state between server and client for hydrating client apps during mounting.
+
+
+It provides a convenient and simple api for rendering common html tags such as title, meta, stylesheets, and scripts. In addition, it has universal/isomorphic-friendly features such as server state serialization, and support for static and non-static pages.
+
+HTMLDocument is well tested and currently used in production on some of our web projects at [Venmo](http://www.venmo.com).
+
 
 ### Installation
 
@@ -22,82 +34,114 @@ This assumes that you’re using [npm](http://npmjs.com/).
 
 ### Examples
 
-Basic static page:
+#### Basic static page
+
 ```es6
 import HTMLDocument from 'react-html-document';
-import ReactDOM from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 
-app.get('/mypageroute', function(req, res, next) {
-  const doc = (
-    <HTMLDocument title="My Page">
+const doc = (
+  <HTMLDocument title="My Page">
+    <h1>Hello World</h1>
+  </HTMLDocument>
+);
+ReactDOMServer.renderToStaticMarkup(doc);
+```
+Renders to:
+```
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <div id="app">
       <h1>Hello World</h1>
-    </HTMLDocument>
-  );
-  const markup = ReactDOM.renderToStaticMarkup(doc);
-  return res.send(markup);
-});
-```
+    </div>
+  </body>
+</html>
 
-Static page with scripts, stylesheets, and meta tags:
+```
+#### Static page with scripts, stylesheets, and meta tags
+
 
 ```es6
 import HTMLDocument from 'react-html-document';
-import ReactDOM from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 
-app.get('/mypageroute', function(req, res, next) {
-  const doc = (
-    <HTMLDocument
-      title="My Page"
-      scripts={['/scripts/main.js']}
-      stylesheets={['/styles/styles.css']}
-      metatags={[
-        { name: 'description', content: 'My description' }
-      ]} >
-      <MyPage />
-    </HTMLDocument>
+const doc = (
+  <HTMLDocument
+    title="My Page"
+    scripts={['/scripts/main.js']}
+    stylesheets={['/styles/styles.css']}
+    metatags={[
+      { name: 'description', content: 'My description' }
+    ]} >
+    <div>My App</div>
+  </HTMLDocument>
   );
-  const markup = ReactDOM.renderToStaticMarkup(doc);
-  return res.send(markup);
-});
+ReactDOMServer.renderToStaticMarkup(doc);
 ```
 
-Universal page with state:
+Renders to:
+```
+<html>
+  <head>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <meta name="description" content="My Description">
+    <title>My Page</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>My App</div>
+    </div>
+    <script src="/scripts/main.js">
+  </body>
+</html>
+```
+
+#### Using Universal state
 
 ```es6
 import HTMLDocument from 'react-html-document';
-import ReactDOM from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 
-/**
-* for illustration purposes, getStateForURL is an unimplemented function that
-* returns a promise that resolves to a state object based on the current
-* request's url
-*/
+const state = { user: "X" };
+const doc = (
+  <HTMLDocument
+    title="My Page with Universal State"
+    universalState={state}>
+  </HTMLDocument>
+);
+ReactDOMServer.renderToStaticMarkup(doc);
+```
 
-app.get('/mypageroute', function(req, res, next) {
-  getStateForURL(req.url)
-    .then(state => {
-      const doc = (
-        <HTMLDocument
-          title="My Page"
-          state={state}
-          scripts={['/scripts/main.js']}
-          stylesheets={['/styles/styles.css']} >
-          <MyApp {...state} />
-        </HTMLDocument>
-      );
-      const markup = ReactDOM.renderToStaticMarkup(doc);
-      return res.send(markup);
-    });
-});
+Renders to:
+```
+<html>
+  <head>
+    <title>My Page with Universal State</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script id="__HTMLDOCUMENT__UNIVERSAL_STATE" type="application/json">
+      { user: "X" }
+    </script>
+  </body>
+</html>
+```
 
-// later on the client
-const state = JSON.parse(document.getElementById('__state').dataset.state);
-Render.render(<MyApp {...state} />, document.getElementById('app'));
+HTMLDocument also provides a function to make this even easier:
+
+
+```es6
+// from the client
+import { getUniversalState } from 'react-html-document';
+
+const state = getUniversalState(); // { user: "X"}
 ```
 
 ### API
 
-General Use Props:
 
 | Prop |  Type | Details | Default
 | -------------- | ------ | --------------- | ---- |
@@ -105,26 +149,22 @@ General Use Props:
 | `metatags`    | array | A list of meta tag attributes. | `[ ]`
 | `scripts` | array | A list of scripts in one of three forms: string paths `'mysite.com/script.js'`, script src objects `{ src: 'mysite.com/script.js' }` or inline scripts `{ inline: 'var x = 1;' }` | `[ ]`
 | `stylesheets` | array | A list of stylesheet in one of three forms: string paths `'mysite.com/styles.css'`, style href objects `{ href: 'mysite.com/styles.css' }` or inline styles `{ inline: 'body { color: '#333' }' }` | `[ ]`
+| `universalState` | object | Contains current server state that will be rendered into a script tag of type `application/json` on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
 | `childrenContainerId`           | string | The id for the dom element that contains the children nodes. | `'app'`
 | `htmlAttributes` | object | [Attributes](https://facebook.github.io/react/docs/tags-and-attributes.html#supported-attributes) that you'd like to use on the html tag. | `{ }`
-
-Props for Universal Rendering:
-
-| Prop |  Type | Details | Default
-| -------------- | ------ | --------------- | ---- |
-| `state` | object | Contains current server state that will be rendered into a div element inside a `data-state` attribute on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
-| `stateKey` | string | Specifies what key to use when saving the state on the client. `<div id="stateKey" data-state="state"` | `'__state'`
-
 
 
 ### Development
 Please take a look at `package.json` for available npm scripts.
+
+For starting a dev server: `npm run dev`
 
 For running mocha tests: `npm test`
 
 For compiling `src` directory into `dist` directory with babel: `npm run build`
 
 For linting with eslint: `npm run lint`
+
 
 
 ### Contributing

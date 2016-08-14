@@ -1,6 +1,6 @@
 {
   "name": "react-html-document",
-  "version": "2.1.0",
+  "version": "3.0.0-beta3",
   "description": "A foundational React component useful for rendering full html documents on the server.",
   "main": "dist/index.js",
   "repository": {
@@ -10,6 +10,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel/register --recursive",
     "build": "babel src --out-dir dist",
+    "dev": "babel-node example-usage-server.js",
     "lint": "eslint src test"
   },
   "keywords": [
@@ -30,6 +31,9 @@
     "url": "https://github.com/venmo/react-html-document/issues"
   },
   "license": "MIT",
+  "browser": {
+    "fs": false
+  },
   "peerDependencies": {
     "react": "0.14.x || 15.x.x",
     "react-dom": "0.14.x || 15.x.x"

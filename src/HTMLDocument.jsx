@@ -1,13 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom/server';
 
+import { STATE_SCRIPT_ID, ASSET_TYPES } from './constants';
+import readFile from './readFile';
+
 
 class HTMLDocument extends Component {
 
   renderChildren() {
     if ( !this.props.children ) return null;
-    const { children, childrenContainerId, state } = this.props;
-    const markup = state ?
+    const { children, childrenContainerId, universalState } = this.props;
+    const markup = universalState ?
       ReactDOM.renderToString(children) :
       ReactDOM.renderToStaticMarkup(children);
     const childrenHTML = { __html: markup };
@@ -18,63 +21,57 @@ class HTMLDocument extends Component {
 
   renderMetatags() {
     const { metatags } = this.props;
-    return metatags.map((props, index) => {
-      return <meta key={index} {...props} />;
-    });
+    return metatags.map((props, index) => <meta key={index} {...props} />);
   }
 
-  renderLinkedStylesheet(href) {
-    return (
-      <link key={href} rel="stylesheet" href={href} />
-    );
+  renderInlineAsset(type, html) {
+    const innerHTML = { __html: html };
+    if ( type === ASSET_TYPES.STYLESHEET ) {
+      return <style key={html} dangerouslySetInnerHTML={innerHTML} />;
+    }
+    return <script key={html} dangerouslySetInnerHTML={innerHTML} />;
   }
 
-  renderInlineStyle(css) {
-    const cssHTML = { __html: css };
-    return (
-      <style key={css} dangerouslySetInnerHTML={cssHTML} />
-    );
+  renderImportedAsset(type, props ) {
+    if ( type === ASSET_TYPES.STYLESHEET ) {
+      return <link key={props.href} rel="stylesheet" {...props} />;
+    }
+    return <script key={props.src} {...props} />;
   }
 
-  renderSourcedScript(props) {
-    return (
-      <script {...props} />
-    );
-  }
-
-  renderInlineScript(js) {
-    const scriptHTML = { __html: js };
-    return (
-      <script key={js} dangerouslySetInnerHTML={scriptHTML} />
-    );
+  renderAsset(type, props) {
+    if ( props.inline ) {
+      const html = props.inline;
+      return this.renderInlineAsset(type, html);
+    } else if ( props.file ) {
+      const html = readFile(props.file).contents;
+      return this.renderInlineAsset(type, html);
+    }
+    return this.renderImportedAsset(type, props);
   }
 
   renderStylesheets() {
     const { stylesheets } = this.props;
     return stylesheets.map(props => {
-      const linkProps = typeof props === 'string' ? { href: props } : props;
-      const renderedTag = linkProps.inline ?
-        this.renderInlineStyle(linkProps.inline) :
-        this.renderLinkedStylesheet(linkProps.href);
-      return renderedTag;
+      const stylesheetProps = typeof props === 'string' ? { href: props } : props;
+      return this.renderAsset(ASSET_TYPES.STYLESHEET, stylesheetProps);
     });
   }
 
-  renderState() {
-    if ( !this.props.state ) return null;
-    const { state, stateKey } = this.props;
-    return <div id={stateKey} data-state={JSON.stringify(state)} />;
-  }
-
-  renderUserScripts() {
+  renderScripts() {
     const { scripts } = this.props;
     return scripts.map(props => {
       const scriptProps = typeof props === 'string' ? { src: props } : props;
-      const renderedTag = scriptProps.inline ?
-        this.renderInlineScript(scriptProps.inline) :
-        this.renderSourcedScript(scriptProps);
-      return renderedTag;
+      return this.renderAsset(ASSET_TYPES.SCRIPT, scriptProps);
     });
+  }
+
+  renderUniversalStateScript() {
+    if ( !this.props.universalState ) return null;
+    const { universalState } = this.props;
+    const stringifiedUniversalState = JSON.stringify(universalState);
+    const innerHTML = { __html: stringifiedUniversalState };
+    return <script id={STATE_SCRIPT_ID} type="application/json" dangerouslySetInnerHTML={innerHTML}/>;
   }
 
   render() {
@@ -87,8 +84,8 @@ class HTMLDocument extends Component {
         </head>
         <body>
           {this.renderChildren()}
-          {this.renderState()}
-          {this.renderUserScripts()}
+          {this.renderUniversalStateScript()}
+          {this.renderScripts()}
         </body>
       </html>
     );
@@ -101,10 +98,9 @@ HTMLDocument.propTypes = {
   htmlAttributes: PropTypes.object,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
-  state: PropTypes.object,
-  stateKey: PropTypes.string,
   stylesheets: PropTypes.array,
-  title: PropTypes.string
+  title: PropTypes.string,
+  universalState: PropTypes.object
 };
 
 HTMLDocument.defaultProps = {
@@ -112,10 +108,9 @@ HTMLDocument.defaultProps = {
   htmlAttributes: {},
   metatags: [],
   scripts: [],
-  state: null,
-  stateKey: '__state',
   stylesheets: [],
-  title: ''
+  title: '',
+  universalState: null
 };
 
 
