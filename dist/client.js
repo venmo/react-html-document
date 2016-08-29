@@ -9,7 +9,7 @@ exports['default'] = getUniversalState;
 var _constants = require('./constants');
 
 var defaultStateParser = function defaultStateParser(script) {
-  return JSON.parse(script.innerText);
+  return JSON.parse(script.textContent);
 };
 
 function getUniversalStateFromScript(script) {

@@ -1,7 +1,7 @@
 import { STATE_SCRIPT_ID, ERRORS } from './constants';
 
 
-const defaultStateParser = script => JSON.parse(script.innerText);
+const defaultStateParser = script => JSON.parse(script.textContent);
 
 export function getUniversalStateFromScript(script, parser = defaultStateParser) {
   if ( !script ) {
