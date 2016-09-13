@@ -53,6 +53,14 @@ var HTMLDocument = (function (_Component) {
       return _react2['default'].createElement('div', { key: childrenContainerId, id: childrenContainerId, dangerouslySetInnerHTML: childrenHTML });
     }
   }, {
+    key: 'renderFavicon',
+    value: function renderFavicon() {
+      var favicon = this.props.favicon;
+
+      if (!favicon) return null;
+      return _react2['default'].createElement('link', { rel: 'icon', href: favicon });
+    }
+  }, {
     key: 'renderMetatags',
     value: function renderMetatags() {
       var metatags = this.props.metatags;
@@ -139,6 +147,7 @@ var HTMLDocument = (function (_Component) {
             this.props.title
           ),
           this.renderMetatags(),
+          this.renderFavicon(),
           this.renderStylesheets()
         ),
         _react2['default'].createElement(
@@ -159,6 +168,7 @@ HTMLDocument.propTypes = {
   childrenContainerId: _react.PropTypes.string,
   children: _react.PropTypes.node,
   htmlAttributes: _react.PropTypes.object,
+  favicon: _react.PropTypes.string,
   metatags: _react.PropTypes.array,
   scripts: _react.PropTypes.array,
   stylesheets: _react.PropTypes.array,
@@ -169,6 +179,7 @@ HTMLDocument.propTypes = {
 HTMLDocument.defaultProps = {
   childrenContainerId: 'app',
   htmlAttributes: {},
+  favicon: '',
   metatags: [],
   scripts: [],
   stylesheets: [],

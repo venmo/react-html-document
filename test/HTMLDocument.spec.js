@@ -34,6 +34,17 @@ describe('HTMLDocument', () => {
     expect(qs('html').attr('lang')).to.equal(props.htmlAttributes.lang);
   });
 
+  it('should render favicon link', () => {
+    const props = {
+      favicon: 'path/to/favicon.ico'
+    };
+    const qs = renderAndGetQuerySelector(props);
+    const $links = qs('link');
+    expect($links.length).to.equal(1);
+    expect($links.attr('rel')).to.equal('icon');
+    expect($links.attr('href')).to.equal(props.favicon);
+  });
+
   describe('Metatags', () => {
     it('should render metatags', () => {
       const props = {

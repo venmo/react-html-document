@@ -10,7 +10,7 @@
 
 HTMLDocument is a foundational [React](https://facebook.github.io/react/) component useful for rendering full html documents on the server.
 
-** **  
+** **
 
 You'll love **HTMLDocument** if:
 * You love (or would love) to use React to render full documents on the server without the need for templates, view engines, or static files.
@@ -151,6 +151,7 @@ const state = getUniversalState(); // { user: "X"}
 | `stylesheets` | array | A list of stylesheet in one of three forms: string paths `'mysite.com/styles.css'`, style href objects `{ href: 'mysite.com/styles.css' }` or inline styles `{ inline: 'body { color: '#333' }' }` | `[ ]`
 | `universalState` | object | Contains current server state that will be rendered into a script tag of type `application/json` on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
 | `childrenContainerId`           | string | The id for the dom element that contains the children nodes. | `'app'`
+| `favicon` | string | URL to your favicon. | `''`
 | `htmlAttributes` | object | [Attributes](https://facebook.github.io/react/docs/tags-and-attributes.html#supported-attributes) that you'd like to use on the html tag. | `{ }`
 
 
@@ -175,7 +176,7 @@ Please open PRs from your fork to master. Keep in mind that we're using the [esl
 
 
 ### Versioning
-This project adheres to [Semantic Versioning](http://semver.org/).  
+This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ### License

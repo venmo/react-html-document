@@ -19,6 +19,12 @@ class HTMLDocument extends Component {
     );
   }
 
+  renderFavicon() {
+    const { favicon } = this.props;
+    if (!favicon) return null;
+    return <link rel="icon" href={favicon} />;
+  }
+
   renderMetatags() {
     const { metatags } = this.props;
     return metatags.map((props, index) => <meta key={index} {...props} />);
@@ -80,6 +86,7 @@ class HTMLDocument extends Component {
         <head>
           <title>{this.props.title}</title>
           {this.renderMetatags()}
+          {this.renderFavicon()}
           {this.renderStylesheets()}
         </head>
         <body>
@@ -96,6 +103,7 @@ HTMLDocument.propTypes = {
   childrenContainerId: PropTypes.string,
   children: PropTypes.node,
   htmlAttributes: PropTypes.object,
+  favicon: PropTypes.string,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
   stylesheets: PropTypes.array,
@@ -106,6 +114,7 @@ HTMLDocument.propTypes = {
 HTMLDocument.defaultProps = {
   childrenContainerId: 'app',
   htmlAttributes: {},
+  favicon: '',
   metatags: [],
   scripts: [],
   stylesheets: [],
