@@ -47,9 +47,10 @@
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
     "mocha": "^2.3.3",
+    "prop-types": "^15.5.8",
     "react": "^15.0.2"
   },
   "dependencies": {
-    "react-dom": "^15.0.2"
+    "react-dom": "^15.5.0"
   }
 }
