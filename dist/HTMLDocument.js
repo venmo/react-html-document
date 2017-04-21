@@ -20,6 +20,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactDomServer = require('react-dom/server');
 
 var _reactDomServer2 = _interopRequireDefault(_reactDomServer);
@@ -165,15 +169,15 @@ var HTMLDocument = (function (_Component) {
 })(_react.Component);
 
 HTMLDocument.propTypes = {
-  childrenContainerId: _react.PropTypes.string,
-  children: _react.PropTypes.node,
-  htmlAttributes: _react.PropTypes.object,
-  favicon: _react.PropTypes.string,
-  metatags: _react.PropTypes.array,
-  scripts: _react.PropTypes.array,
-  stylesheets: _react.PropTypes.array,
-  title: _react.PropTypes.string,
-  universalState: _react.PropTypes.object
+  childrenContainerId: _propTypes2['default'].string,
+  children: _propTypes2['default'].node,
+  htmlAttributes: _propTypes2['default'].object,
+  favicon: _propTypes2['default'].string,
+  metatags: _propTypes2['default'].array,
+  scripts: _propTypes2['default'].array,
+  stylesheets: _propTypes2['default'].array,
+  title: _propTypes2['default'].string,
+  universalState: _propTypes2['default'].object
 };
 
 HTMLDocument.defaultProps = {
