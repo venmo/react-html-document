@@ -19,6 +19,17 @@ function render(req, res) {
         inline: 'var x = 2;'
       }
     ],
+    headScripts: [
+      {
+        src: '/dist/my-head-script.js',
+      },
+      {
+        file: path.join(__dirname, './test/test-script.js')
+      },
+      {
+        inline: 'var x = 3;'
+      }
+    ],
     stylesheets: [
       {
         href: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'

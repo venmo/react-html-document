@@ -188,6 +188,18 @@ describe('HTMLDocument', () => {
       expect($scripts.length).to.equal(1);
       expect($scripts.html()).to.equal(scriptContents);
     });
+
+    it('should render scripts inside head tag', () => {
+      const props = {
+        headScripts: [
+          { inline: 'window.myApp = true;' }
+        ],
+      };
+      const qs = renderAndGetQuerySelector(props);
+      const $scripts = qs('head script').not(`script#${STATE_SCRIPT_ID}`);
+      expect($scripts.length).to.equal(1);
+      expect($scripts.html()).to.equal(props.headScripts[0].inline);
+    });
   });
 
   describe('Children', () => {

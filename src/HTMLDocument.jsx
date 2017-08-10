@@ -64,12 +64,19 @@ class HTMLDocument extends Component {
     });
   }
 
-  renderScripts() {
-    const { scripts } = this.props;
+  renderScripts(scripts) {
     return scripts.map(props => {
       const scriptProps = typeof props === 'string' ? { src: props } : props;
       return this.renderAsset(ASSET_TYPES.SCRIPT, scriptProps);
     });
+  }
+
+  renderBodyScripts() {
+    return this.renderScripts(this.props.scripts);
+  }
+
+  renderHeadScripts() {
+    return this.renderScripts(this.props.headScripts);
   }
 
   renderUniversalStateScript() {
@@ -88,11 +95,12 @@ class HTMLDocument extends Component {
           {this.renderMetatags()}
           {this.renderFavicon()}
           {this.renderStylesheets()}
+          {this.renderHeadScripts()}
         </head>
         <body>
           {this.renderChildren()}
           {this.renderUniversalStateScript()}
-          {this.renderScripts()}
+          {this.renderBodyScripts()}
         </body>
       </html>
     );
@@ -106,6 +114,7 @@ HTMLDocument.propTypes = {
   favicon: PropTypes.string,
   metatags: PropTypes.array,
   scripts: PropTypes.array,
+  headScripts: PropTypes.array,
   stylesheets: PropTypes.array,
   title: PropTypes.string,
   universalState: PropTypes.object
@@ -117,6 +126,7 @@ HTMLDocument.defaultProps = {
   favicon: '',
   metatags: [],
   scripts: [],
+  headScripts: [],
   stylesheets: [],
   title: '',
   universalState: null

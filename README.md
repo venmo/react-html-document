@@ -148,6 +148,7 @@ const state = getUniversalState(); // { user: "X"}
 | `title` | string | Title for the document. | `''`
 | `metatags`    | array | A list of meta tag attributes. | `[ ]`
 | `scripts` | array | A list of scripts in one of three forms: string paths `'mysite.com/script.js'`, script src objects `{ src: 'mysite.com/script.js' }` or inline scripts `{ inline: 'var x = 1;' }` | `[ ]`
+| `headScripts` | array | A list of scripts inside the head tag. it follows the same format as `scripts`
 | `stylesheets` | array | A list of stylesheet in one of three forms: string paths `'mysite.com/styles.css'`, style href objects `{ href: 'mysite.com/styles.css' }` or inline styles `{ inline: 'body { color: '#333' }' }` | `[ ]`
 | `universalState` | object | Contains current server state that will be rendered into a script tag of type `application/json` on the page. Helpful for re-mounting with props on the client in universal apps. When not using it, children will be rendered statically. | `null`
 | `childrenContainerId`           | string | The id for the dom element that contains the children nodes. | `'app'`
