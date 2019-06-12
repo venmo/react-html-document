@@ -16,6 +16,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function _escapeDangerousTags(html) {
+  // Dangerous tags according to https://www.w3.org/TR/html52/semantics-scripting.html#restrictions-for-contents-of-script-elements
+  const dangerousTags = {
+    '<!--': '<\\!--',
+    '<script': '<\\script',
+    '</script': '<\\/script',
+    '<style': '<\\style',
+    '</style': '<\\/style'
+  };
+  let htmlString = String(html)
+  Object.entries(dangerousTags).forEach(([dangerousTag, replacementValue]) => {
+    htmlString = htmlString.replace(new RegExp(dangerousTag, 'g'), replacementValue);
+  });
+  return htmlString;
+}
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -72,7 +88,7 @@ var HTMLDocument = (function (_Component) {
   }, {
     key: 'renderInlineAsset',
     value: function renderInlineAsset(type, html) {
-      var innerHTML = { __html: html };
+      var innerHTML = { __html: _escapeDangerousTags(html) };
       if (type === _constants.ASSET_TYPES.STYLESHEET) {
         return _react2['default'].createElement('style', { key: html, dangerouslySetInnerHTML: innerHTML });
       }
@@ -129,7 +145,7 @@ var HTMLDocument = (function (_Component) {
       var universalState = this.props.universalState;
 
       var stringifiedUniversalState = JSON.stringify(universalState);
-      var innerHTML = { __html: stringifiedUniversalState };
+      var innerHTML = { __html: _escapeDangerousTags(stringifiedUniversalState) };
       return _react2['default'].createElement('script', { id: _constants.STATE_SCRIPT_ID, type: 'application/json', dangerouslySetInnerHTML: innerHTML });
     }
   }, {

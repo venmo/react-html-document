@@ -4,6 +4,21 @@ import ReactDOM from 'react-dom/server';
 import { STATE_SCRIPT_ID, ASSET_TYPES } from './constants';
 import readFile from './readFile';
 
+function _escapeDangerousTags(html) {
+  // Dangerous tags according to https://www.w3.org/TR/html52/semantics-scripting.html#restrictions-for-contents-of-script-elements
+  const dangerousTags = {
+    '<!--': '<\\!--',
+    '<script': '<\\script',
+    '</script': '<\\/script',
+    '<style': '<\\style',
+    '</style': '<\\/style'
+  };
+  let htmlString = String(html)
+  Object.entries(dangerousTags).forEach(([dangerousTag, replacementValue]) => {
+    htmlString = htmlString.replace(new RegExp(dangerousTag, 'g'), replacementValue);
+  });
+  return htmlString;
+}
 
 class HTMLDocument extends Component {
 
@@ -31,7 +46,7 @@ class HTMLDocument extends Component {
   }
 
   renderInlineAsset(type, html) {
-    const innerHTML = { __html: html };
+    const innerHTML = { __html: _escapeDangerousTags(html) };
     if ( type === ASSET_TYPES.STYLESHEET ) {
       return <style key={html} dangerouslySetInnerHTML={innerHTML} />;
     }
@@ -76,7 +91,7 @@ class HTMLDocument extends Component {
     if ( !this.props.universalState ) return null;
     const { universalState } = this.props;
     const stringifiedUniversalState = JSON.stringify(universalState);
-    const innerHTML = { __html: stringifiedUniversalState };
+    const innerHTML = { __html: _escapeDangerousTags(stringifiedUniversalState) };
     return <script id={STATE_SCRIPT_ID} type="application/json" dangerouslySetInnerHTML={innerHTML}/>;
   }
 
